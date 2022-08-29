@@ -1,0 +1,28 @@
+[tool.black]
+line-length = 120
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+(
+  /(
+      migrations
+  )/
+)
+'''
+
+[tool.poetry]
+name = "elementary-api"
+version = "0.1.0"
+description = ""
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "4.0.7"
+djangorestframework = "3.12.4"
+django-types = {git = "https://github.com/sbdchd/django-types", branch = "main"}
+djangorestframework-types = {git = "https://github.com/sbdchd/djangorestframework-types", branch = "master"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.masonry.api"
