@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["app"],
   "exclude": ["**/tests", "**/migrations"],
   "useLibraryCodeForTypes": true,
   "reportOptionalSubscript": "error",
