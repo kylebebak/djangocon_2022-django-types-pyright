@@ -11,7 +11,7 @@ exclude = '''
 '''
 
 [tool.poetry]
-name = "elementary-api"
+name = "django-types-talk"
 version = "0.1.0"
 description = ""
 authors = []
