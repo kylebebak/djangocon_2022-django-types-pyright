@@ -42,23 +42,23 @@ We'll add type hints to the following data model, and add some type-hinted views
 ```mmd
 erDiagram
     user {
-        int id
-        string email
+        id int
+        email string
     }
 
     post {
-        int id
-        int user_id FK
-        int thread_id FK
-        string text
-        boolean is_deleted
+        id int
+        user_id int FK
+        thread_id int FK
+        text string
+        is_deleted boolean
     }
 
     thread {
-        int id
-        string name
-        json meta
-        id moderator_id FK
+        id int
+        moderator_id int FK
+        name string
+        meta json
     }
 
     post }|--|| user : ""

@@ -17,13 +17,7 @@ class BaseModel(models.Model):
         abstract = True
 
 
-RolesType = Literal["member", "moderator", "admin"]
-
-
 class User(BaseModel):
-    role: models.CharField[RolesType]
-    posts: Manager[Post]
-    threads: models.ManyToManyField[Thread, UserThread]
 
     email = models.EmailField(unique=True)
 
@@ -36,7 +30,7 @@ class User(BaseModel):
         (ROLE_MODERATOR, ROLE_MODERATOR),
         (ROLE_ADMIN, ROLE_ADMIN),
     )
-    role = models.CharField(  # type: ignore
+    role = models.CharField(
         max_length=20,
         choices=ROLE_CHOICES,
         default=ROLE_MEMBER,
@@ -47,9 +41,6 @@ class User(BaseModel):
 
 
 class Post(BaseModel):
-    user_id: int
-    thread_id: int
-    thread: models.ForeignKey[Thread]
 
     user = models.ForeignKey(User, related_name="posts", on_delete=models.CASCADE)
     thread = models.ForeignKey("Thread", related_name="posts", on_delete=models.CASCADE)
@@ -58,9 +49,6 @@ class Post(BaseModel):
 
 
 class Thread(BaseModel):
-    moderator_id: int | None
-    posts: Manager[Post]
-    users: models.ManyToManyField[User, UserThread]
 
     moderator = models.ForeignKey(User, related_name="threads", null=True, on_delete=models.SET_NULL)
     text = models.CharField(max_length=10000, blank=False)
@@ -84,11 +72,5 @@ def send_email(email, text):
 
 def send_notifications():
     """
-    Send email notification to each user, with text from all posts in threads user is subscribed to.
+    Send email notification to each user, with text from all posts in threads user is subscribed to, in last 7 days.
     """
-    for thread in Thread.objects.prefetch_related("users", "posts"):
-        new_posts = list(thread.posts.filter(created_at__gt=timezone.now() - timedelta(days=7)))
-        if not new_posts:
-            continue
-        for user in thread.users.all():
-            send_email(user.email, "".join(post.text for post in new_posts))
